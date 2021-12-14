@@ -4,9 +4,7 @@ import (
 	"time"
 )
 
-type localcache struct{}
-
-func (lc *localcache) Get(k string) (interface{}, error) {
+func Get(k string) (interface{}, error) {
 	cd := Data[k]
 	if &cd == nil {
 		return nil, ErrValueNotFound
@@ -19,7 +17,7 @@ func (lc *localcache) Get(k string) (interface{}, error) {
 	return cd.content, nil
 }
 
-func (lc *localcache) Set(k string, d interface{}) error {
+func Set(k string, d interface{}) error {
 	Data[k] = CacheData{content: d, expiredTime: expiredTime()}
 	return nil
 }
