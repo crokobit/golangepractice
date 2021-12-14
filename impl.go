@@ -1,20 +1,30 @@
 package localcache
 
 import (
-	"errors"
+	"time"
 )
 
 type localcache struct{}
 
 func (lc *localcache) Get(k string) (interface{}, error) {
-	t := Data[k]
-	if t != nil {
-		return t, nil
+	cd := Data[k]
+	if &cd == nil {
+		return nil, ErrValueNotFound
 	}
-	return nil, errors.New("value not found")
+	if time.Now().After(cd.expiredTime) {
+		delete(Data, k)
+		return nil, ErrDataExpired
+	}
+
+	return cd.content, nil
 }
 
 func (lc *localcache) Set(k string, d interface{}) error {
-	Data[k] = d
+	Data[k] = CacheData{content: d, expiredTime: expiredTime()}
 	return nil
+}
+
+func expiredTime() time.Time {
+	t := time.Now().Add(30 * time.Duration(time.Second))
+	return t
 }

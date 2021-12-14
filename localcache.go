@@ -26,10 +26,24 @@ type Cache interface {
 */
 package localcache
 
-//var Data = make(map[string]interface{})
-var Data = make(map[string]interface{}) //{"appId": 2, "fcmServerKey": "keyTestTest", "name": "com.app", "version": []int{1, 2, 3}, "xyz": 3}
+import (
+	"errors"
+	"time"
+)
+
+var Data = make(map[string]CacheData)
+
+var (
+	ErrValueNotFound = errors.New("value not found")
+	ErrDataExpired   = errors.New("data expired")
+)
 
 type Cache interface {
 	Get(k string) (interface{}, error)
 	Set(k string) error
+}
+
+type CacheData struct {
+	content     interface{}
+	expiredTime time.Time
 }
