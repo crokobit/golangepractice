@@ -7,7 +7,6 @@ import (
 )
 
 func TestSet(t *testing.T) {
-	//c := &localcache{}
 	Set("key1", 100)
 	got := Data["key1"].content
 	expect := 100
@@ -29,7 +28,6 @@ func TestGet(t *testing.T) {
 }
 
 func TestGetWithExpiredData(t *testing.T) {
-	//c := &localcache{}
 	Data["key3"] = CacheData{content: 200, expiredTime: time.Now().AddDate(0, -1, 0)}
 	expectError := ErrDataExpired
 	_, err := Get("key3")
