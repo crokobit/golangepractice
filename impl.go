@@ -4,6 +4,8 @@ import (
 	"time"
 )
 
+var data = make(map[string]CacheData)
+
 type localcache struct {
 }
 
