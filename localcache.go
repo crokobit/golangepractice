@@ -14,7 +14,9 @@ var (
 
 // the format using for cache, including content and expiredTime
 type CacheData struct {
-	content     interface{}
+	// the content of cache
+	content interface{}
+	// the expiredTime of cache
 	expiredTime time.Time
 }
 
