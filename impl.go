@@ -4,14 +4,14 @@ import (
 	"time"
 )
 
-var data = make(map[string]CacheData)
+var data = make(map[string]*CacheData)
 
 type localcache struct {
 }
 
 func (lc *localcache) Get(k string) (interface{}, error) {
 	cd := data[k]
-	if &cd == nil {
+	if cd == nil {
 		return nil, ErrValueNotFound
 	}
 	if time.Now().After(cd.expiredTime) {
@@ -23,7 +23,7 @@ func (lc *localcache) Get(k string) (interface{}, error) {
 }
 
 func (lc *localcache) Set(k string, d interface{}) error {
-	data[k] = CacheData{content: d, expiredTime: expiredTime()}
+	data[k] = &CacheData{content: d, expiredTime: expiredTime()}
 	return nil
 }
 
