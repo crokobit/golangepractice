@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-var Data = make(map[string]CacheData)
+var data = make(map[string]CacheData)
 
 var (
 	ErrValueNotFound = errors.New("value not found")
