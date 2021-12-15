@@ -4,7 +4,8 @@ import (
 	"time"
 )
 
-type localcache struct{}
+type localcache struct {
+}
 
 func (lc *localcache) Get(k string) (interface{}, error) {
 	cd := Data[k]
@@ -22,6 +23,11 @@ func (lc *localcache) Get(k string) (interface{}, error) {
 func (lc *localcache) Set(k string, d interface{}) error {
 	Data[k] = CacheData{content: d, expiredTime: expiredTime()}
 	return nil
+}
+
+func New() Cache {
+	c := localcache{}
+	return &c
 }
 
 func expiredTime() time.Time {
