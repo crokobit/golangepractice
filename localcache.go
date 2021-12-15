@@ -20,6 +20,8 @@ type CacheData struct {
 
 // the interface of cache, provide Get() and Set() two methods
 type Cache interface {
+	// Get the value/content of cache with a string
 	Get(string) (interface{}, error)
+	// Set the value/content of cache by a string
 	Set(string, interface{}) error
 }
