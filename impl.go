@@ -4,22 +4,37 @@ import (
 	"time"
 )
 
-func Get(k string) (interface{}, error) {
-	cd := Data[k]
-	if &cd == nil {
+type cacheData struct {
+	content     interface{}
+	expiredTime time.Time
+}
+
+var data = make(map[string]*cacheData)
+
+type localcache struct {
+}
+
+func (lc *localcache) Get(k string) (interface{}, error) {
+	cd := data[k]
+	if cd == nil {
 		return nil, ErrValueNotFound
 	}
 	if time.Now().After(cd.expiredTime) {
-		delete(Data, k)
+		delete(data, k)
 		return nil, ErrDataExpired
 	}
 
 	return cd.content, nil
 }
 
-func Set(k string, d interface{}) error {
-	Data[k] = CacheData{content: d, expiredTime: expiredTime()}
+func (lc *localcache) Set(k string, d interface{}) error {
+	data[k] = &cacheData{content: d, expiredTime: expiredTime()}
 	return nil
+}
+
+func New() Cache {
+	c := localcache{}
+	return &c
 }
 
 func expiredTime() time.Time {

@@ -7,20 +7,21 @@ import (
 )
 
 func TestSet(t *testing.T) {
-	Set("key1", 100)
-	got := Data["key1"].content
-	expect := 100
+	c := New()
+	c.Set("key1", 100)
+	got := data["key1"].content
 
+	expect := 100
 	if !reflect.DeepEqual(expect, got) {
 		t.Fatalf("expected: %v, got: %v", expect, got)
 	}
 }
 
 func TestGet(t *testing.T) {
-	//c := &localcache{}
-	Data["key2"] = CacheData{content: 200, expiredTime: time.Now().Add(30 * time.Duration(time.Second))}
+	c := New()
+	data["key2"] = &cacheData{content: 200, expiredTime: time.Now().Add(30 * time.Duration(time.Second))}
 	expect := 200
-	got, _ := Get("key2")
+	got, _ := c.Get("key2")
 
 	if !reflect.DeepEqual(expect, got) {
 		t.Fatalf("expected: %v, got: %v", expect, got)
@@ -28,9 +29,10 @@ func TestGet(t *testing.T) {
 }
 
 func TestGetWithExpiredData(t *testing.T) {
-	Data["key3"] = CacheData{content: 200, expiredTime: time.Now().AddDate(0, -1, 0)}
+	c := New()
+	data["key3"] = &cacheData{content: 200, expiredTime: time.Now().AddDate(0, -1, 0)}
 	expectError := ErrDataExpired
-	_, err := Get("key3")
+	_, err := c.Get("key3")
 
 	if !(expectError == err) {
 		t.Fatalf("expected: %v, got: %v", ErrDataExpired, err)

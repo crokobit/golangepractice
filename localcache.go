@@ -2,25 +2,19 @@ package localcache
 
 import (
 	"errors"
-	"time"
 )
 
-var Data = make(map[string]CacheData)
-
 var (
-	// ErrValueNotFound indicates the key is missing
+	// ErrValueNotFound is the error when localcache can not find the vlaue by key
 	ErrValueNotFound = errors.New("value not found")
-	// ErrDataExpired indicates the key is found but data is expired
+	// ErrDataExpired is the error when the value is found in localcache but it is expired
 	ErrDataExpired = errors.New("data expired")
 )
 
+// Cache is the interface that provides Get() and Set() two methods
 type Cache interface {
-	Get(k string) (interface{}, error)
-	Set(k string) error
-}
-
-// the struct be saved in the Data var
-type CacheData struct {
-	content     interface{}
-	expiredTime time.Time
+	// Get the value/content of cache with a string
+	Get(string) (interface{}, error)
+	// Set the value/content of cache by a string
+	Set(string, interface{}) error
 }
