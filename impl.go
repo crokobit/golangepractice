@@ -4,7 +4,12 @@ import (
 	"time"
 )
 
-var data = make(map[string]*CacheData)
+type cacheData struct {
+	content     interface{}
+	expiredTime time.Time
+}
+
+var data = make(map[string]*cacheData)
 
 type localcache struct {
 }
@@ -23,7 +28,7 @@ func (lc *localcache) Get(k string) (interface{}, error) {
 }
 
 func (lc *localcache) Set(k string, d interface{}) error {
-	data[k] = &CacheData{content: d, expiredTime: expiredTime()}
+	data[k] = &cacheData{content: d, expiredTime: expiredTime()}
 	return nil
 }
 

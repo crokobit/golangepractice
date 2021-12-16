@@ -19,7 +19,7 @@ func TestSet(t *testing.T) {
 
 func TestGet(t *testing.T) {
 	c := New()
-	data["key2"] = &CacheData{content: 200, expiredTime: time.Now().Add(30 * time.Duration(time.Second))}
+	data["key2"] = &cacheData{content: 200, expiredTime: time.Now().Add(30 * time.Duration(time.Second))}
 	expect := 200
 	got, _ := c.Get("key2")
 
@@ -30,7 +30,7 @@ func TestGet(t *testing.T) {
 
 func TestGetWithExpiredData(t *testing.T) {
 	c := New()
-	data["key3"] = &CacheData{content: 200, expiredTime: time.Now().AddDate(0, -1, 0)}
+	data["key3"] = &cacheData{content: 200, expiredTime: time.Now().AddDate(0, -1, 0)}
 	expectError := ErrDataExpired
 	_, err := c.Get("key3")
 
